@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,19 +42,56 @@ public class SecurityConfig {
     public SecurityFilterChain FilterChain(HttpSecurity http) throws Exception {
         //Nơi cấu hình toàn bộ security
         http
-                //Tắt cơ chế bảo vệ CSRF của Spring Security
                 .csrf(csrf -> csrf.disable())
 
-                //Cho phép frontend gọi API backend
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
-                //Cho phép truy cập không xác thực,k yêu cầu AuthZ, AuthN - phân quyền
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/homepage",
-                                "/api/auth/register",
-                                "/api/auth/login").permitAll()
-                        .anyRequest().authenticated()
-                ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(auth -> {
+
+                    auth
+
+                            // public
+                            .requestMatchers(
+                                    "/api/auth/**"
+                            ).permitAll()
+
+                            // GET product ai cũng xem được
+                            .requestMatchers(
+                                    HttpMethod.GET,
+                                    "/api/products/**"
+                            ).permitAll()
+
+                            // POST product
+                            .requestMatchers(
+                                    HttpMethod.POST,
+                                    "/api/products/**"
+                            ).hasAnyRole("ADMIN", "STAFF")
+
+                            // PUT product
+                            .requestMatchers(
+                                    HttpMethod.PUT,
+                                    "/api/products/**"
+                            ).hasAnyRole("ADMIN", "STAFF")
+
+                            // DELETE product
+                            .requestMatchers(
+                                    HttpMethod.DELETE,
+                                    "/api/products/**"
+                            ).hasAnyRole("ADMIN", "STAFF")
+
+                            // còn lại cần login
+                            .anyRequest().authenticated();
+                })
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
+
         return http.build();
     }
 

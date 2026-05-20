@@ -53,6 +53,7 @@ public class JwtProvider {
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
+            return true;
         } catch (ExpiredJwtException e) {
             System.out.println("Token hết hạn");
         } catch (MalformedJwtException e) {

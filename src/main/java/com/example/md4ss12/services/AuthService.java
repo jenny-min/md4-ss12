@@ -10,6 +10,7 @@ import com.example.md4ss12.repositories.UserRepository;
 import com.example.md4ss12.securities.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,7 +60,6 @@ public class AuthService {
 
     // login
     public ApiResponse<LoginResponseDTO> login(LoginRequestDTO request) {
-
         // xác thực
         Authentication authentication =
                 authenticationManager.authenticate(
