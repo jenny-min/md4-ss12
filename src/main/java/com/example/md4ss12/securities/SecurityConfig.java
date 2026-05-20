@@ -41,7 +41,7 @@ public class SecurityConfig {
     public SecurityFilterChain FilterChain(HttpSecurity http) throws Exception {
         //Nơi cấu hình toàn bộ security
         http
-                ////Tắt cơ chế bảo vệ CSRF của Spring Security
+                //Tắt cơ chế bảo vệ CSRF của Spring Security
                 .csrf(csrf -> csrf.disable())
 
                 //Cho phép frontend gọi API backend
