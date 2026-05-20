@@ -85,4 +85,20 @@ public class JwtProvider {
 
         return claims.get("role", String.class);
     }
+
+    public String generateRefreshToken(User user){
+
+        Date now = new Date();
+
+        Date expiryDate =
+                new Date(now.getTime() + 604800000);
+
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
 }

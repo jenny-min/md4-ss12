@@ -80,9 +80,13 @@ public class AuthService {
         String accessToken =
                 jwtProvider.generateToken(user);
 
+        // tạo refresh token
+        String refreshToken =
+                jwtProvider.generateRefreshToken(user);
+
         // tạo response
         LoginResponseDTO response =
-                new LoginResponseDTO(accessToken);
+                new LoginResponseDTO(accessToken, refreshToken);
 
         return new ApiResponse<>(
                 true,

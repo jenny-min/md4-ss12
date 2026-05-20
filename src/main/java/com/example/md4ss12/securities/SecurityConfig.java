@@ -49,7 +49,9 @@ public class SecurityConfig {
 
                 //Cho phép truy cập không xác thực,k yêu cầu AuthZ, AuthN - phân quyền
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/homepage", "/api/auth/register","/api/auth/login").permitAll()
+                        .requestMatchers("/", "/homepage",
+                                "/api/auth/register",
+                                "/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
