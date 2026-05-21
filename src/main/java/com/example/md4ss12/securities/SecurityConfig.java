@@ -83,6 +83,25 @@ public class SecurityConfig {
                                     "/api/products/**"
                             ).hasAnyRole("ADMIN", "STAFF")
 
+                            // CUSTOMER
+                            .requestMatchers(HttpMethod.POST,
+                                    "/api/orders")
+                            .hasRole("CUSTOMER")
+
+                            .requestMatchers(HttpMethod.GET,
+                                    "/api/orders/my")
+                            .hasRole("CUSTOMER")
+
+                            // STAFF + ADMIN
+                            .requestMatchers(HttpMethod.GET,
+                                    "/api/orders")
+                            .hasAnyRole("STAFF", "ADMIN")
+
+                            // STAFF
+                            .requestMatchers(HttpMethod.PUT,
+                                    "/api/orders/*/status")
+                            .hasRole("STAFF")
+
                             // còn lại cần login
                             .anyRequest().authenticated();
                 })

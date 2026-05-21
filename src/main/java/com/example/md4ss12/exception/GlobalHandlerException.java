@@ -64,19 +64,15 @@ public class GlobalHandlerException {
 
     // RuntimeException
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<String>>
-    handleRuntime(RuntimeException ex){
+    public ResponseEntity<ApiResponse<?>> handleRuntime(RuntimeException ex){
 
-        ApiResponse<String> response =
-                new ApiResponse<>(
-                        false,
-                        ex.getMessage(),
-                        null
-                );
+        ApiResponse<?> response = ApiResponse.builder()
+                .success(false)
+                .message(ex.getMessage())
+                .data(null)
+                .build();
 
-        return ResponseEntity
-                .badRequest()
-                .body(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     // Exception tổng
