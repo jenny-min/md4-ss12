@@ -112,6 +112,16 @@ public class SecurityConfig {
                                     "/api/users/me"
                             ).authenticated()
 
+                            // review cần login
+                            .requestMatchers(
+                                    "/api/reviews"
+                            ).authenticated()
+
+                            // ADMIN mới xem report
+                            .requestMatchers(
+                                    "/api/reports/**"
+                            ).hasRole("ADMIN")
+
                             // còn lại cần login
                             .anyRequest().authenticated();
                 })
