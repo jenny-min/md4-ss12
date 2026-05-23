@@ -102,6 +102,16 @@ public class SecurityConfig {
                                     "/api/orders/*/status")
                             .hasRole("STAFF")
 
+                            // ADMIN mới được đổi role
+                            .requestMatchers(
+                                    "/api/users/*/role"
+                            ).hasRole("ADMIN")
+
+                            // user login xem profile
+                            .requestMatchers(
+                                    "/api/users/me"
+                            ).authenticated()
+
                             // còn lại cần login
                             .anyRequest().authenticated();
                 })
